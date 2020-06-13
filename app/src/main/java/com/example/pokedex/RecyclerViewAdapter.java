@@ -11,11 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     private Context mcontext;
     private List<Pokemon> mData;
+    private ArrayList<Pokemon> results;
+
+    public RecyclerViewAdapter(ArrayList<Pokemon> results) {
+        this.results = results;
+    }
 
     public RecyclerViewAdapter(Context mcontext, List<Pokemon> mData) {
         this.mcontext = mcontext;

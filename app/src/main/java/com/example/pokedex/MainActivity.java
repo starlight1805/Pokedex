@@ -8,10 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
-
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -25,34 +26,36 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<Pokemon>data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final JSONObject jsonObject=new JSONObject();
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl(Api.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         Api api=retrofit.create(Api.class);
-        Call<List<Pokemon>> call=api.getPokemon();
-        call.enqueue(new Callback<List<Pokemon>>() {
+        Call<Pokemon> call=api.getPokemon();
+        call.enqueue(new Callback<Pokemon>() {
             @Override
-            public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {
-                List<Pokemon> Pokemons=response.body();
-                for(Pokemon p:Pokemons){
-                    Log.d("Pokemon: ",p.getName());
+            public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getApplicationContext(),"Im in",Toast.LENGTH_SHORT).show();
+                    Pokemon pokemon=response.body();
+                    data= new ArrayList<Pokemon>(Arrays.asList(pokemon.getResults()));
                 }
+                else Toast.makeText(getApplicationContext(),"Its Gone",Toast.LENGTH_SHORT).show();
             }
             @Override
-            public void onFailure(Call<List<Pokemon>> call, Throwable t) {
+            public void onFailure(Call<Pokemon> call, Throwable t) {
                 Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         recyclerView.setHasFixedSize(true);
-        mAdapter=new RecyclerViewAdapter(this,Book1);
+        mAdapter=new RecyclerViewAdapter(this,data);
         recyclerView.setLayoutManager( new GridLayoutManager(this,2));
         recyclerView.setAdapter(mAdapter);
     }
