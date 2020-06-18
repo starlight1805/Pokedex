@@ -1,34 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cardview_id"
+    android:id="@+id/cardviewtype_id"
     android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:layout_width="140dp"
-    android:layout_height="200dp"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
     xmlns:cardview="http://schemas.+android.com/tools"
     android:layout_margin="4dp"
-    cardview:cardCornerRadius="10dp">
+    cardview:cardCornerRadius="10dp"
+
+    >
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/pokeimg_id"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:scaleType="centerCrop"
-            android:background="#2d2d2d"/>
-
         <TextView
-            android:id="@+id/pokename_id"
+            android:id="@+id/poketype"
+            android:fontFamily="@font/andika"
+            android:background="@drawable/background9"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/andika"
             android:gravity="center"
-            android:text="Poke name"
+            android:text="Poke Type"
             android:textColor="#2d2d2d"
-            android:textSize="13sp" />
+            android:textSize="30sp" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

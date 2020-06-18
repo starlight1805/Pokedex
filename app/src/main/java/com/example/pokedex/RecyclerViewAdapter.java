@@ -1,6 +1,8 @@
 package com.example.pokedex;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,23 +13,18 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
-    private Context mcontext;
-    private List<Pokemon> mData;
     private ArrayList<Pokemon> results;
-
-    public RecyclerViewAdapter(ArrayList<Pokemon> results) {
+    private Context mcontext;
+    public RecyclerViewAdapter(ArrayList<Pokemon> results, Context mcontext) {
         this.results = results;
-    }
-
-    public RecyclerViewAdapter(Context mcontext, List<Pokemon> mData) {
         this.mcontext = mcontext;
-        this.mData = mData;
     }
-
 
     @NonNull
     @Override
@@ -39,20 +36,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.pokimg.setImageResource(mData.get(position).getImage());
-        holder.pokename.setText(mData.get(position).getName());
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+        holder.pokename.setText("#"+results.get(position).getNumber()+"   "+results.get(position).getName());
+        Glide.with(mcontext)
+                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+results.get(position).getNumber()+".png")
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.pokimg);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent=new Intent(mcontext,Main2Activity.class);
+                intent.putExtra("number",results.get(position).getNumber());
+                intent.putExtra("name",results.get(position).getName());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mcontext.startActivity(intent);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return results.size();
     }
 
     public static  class MyViewHolder extends RecyclerView.ViewHolder{
